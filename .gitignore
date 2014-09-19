@@ -1,0 +1,13 @@
+*~
+*.beam
+/.*/
+doc/*
+!doc/*.md
+ebin/
+.dialyzer.plt
+deps/
+log/
+erl
+*.dump
+.eunit
+.rebar

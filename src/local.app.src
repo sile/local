@@ -1,0 +1,13 @@
+%% vim: set ft=erlang : -*- erlang -*-
+{application, local,
+ [
+  {description, "A Local Name Registration Facility"},
+  {vsn, git},
+  {registered, [local_sup]},
+  {applications, [
+                  kernel,
+                  stdlib
+                 ]},
+  {mod, { local_app, []}},
+  {env, []}
+ ]}.
