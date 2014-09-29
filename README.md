@@ -5,7 +5,7 @@ A Local Name Registration Facility.
 
 The library provides the following features:
 - Registration of locally scoped names
-  - `gen_server' (and other OTP behaviours) can use the registration facility through `{via, local, local:name()}` formatted name
+  - `gen_server` (and other OTP behaviours) can use the registration facility through `{via, local, local:name()}` formatted name
 - Can be embedded in another aplication
 
 QuickStart
