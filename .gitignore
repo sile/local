@@ -3,6 +3,7 @@
 /.*/
 doc/*
 !doc/*.md
+doc/README.md
 ebin/
 .dialyzer.plt
 deps/

@@ -1,5 +1,6 @@
-%% @copyright 2013-2014, Takeru Ohta <phjgt308@gmail.com>
+%% @copyright 2014, Takeru Ohta <phjgt308@gmail.com>
 %%
+%% @doc application root supervisor
 %% @private
 -module(local_sup).
 
@@ -27,17 +28,18 @@
 start_link() ->
     supervisor:start_link({local, ?MODULE}, ?MODULE, []).
 
+%% @doc Starts new local name server
 -spec start_name_server(local:name_server_name()) -> ok | {error, Reason} when
-      Reason :: already_present | {already_started, pid()}.
+      Reason :: already_present.
 start_name_server(Name) ->
-    Child = local:make_name_server_child_spec(Name),
-    case supervisor:start_child(?MODULE, Child) of
-        {ok, _Pid}                      -> ok;
-        {error, already_present}        -> {error, already_present};
-        {error, {already_started, Pid}} -> {error, {already_started, Pid}};
-        Other                           -> error({unexpected_result, Other}, [Name])
+    case supervisor:start_child(?MODULE, local:name_server_child_spec(Name)) of
+        {ok, _Pid}                    -> ok;
+        {error, already_present}      -> {error, already_present};
+        {error, {already_started, _}} -> {error, already_present};
+        Other                         -> error({unexpected_result, Other}, [Name])
     end.
 
+%% @doc Stops the name server identified by `Name'
 -spec stop_name_server(local:name_server_name()) -> ok | {error, Reason} when
       Reason :: not_found.
 stop_name_server(Name) ->
@@ -46,6 +48,7 @@ stop_name_server(Name) ->
         ok                 -> ok = supervisor:delete_child(?MODULE, Name)
     end.
 
+%% @doc Returns a list of running name server
 -spec which_name_servers() -> [local:name_server_name()].
 which_name_servers() ->
     [Id || {Id, _, _, _} <- supervisor:which_children(?MODULE)].

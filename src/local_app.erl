@@ -1,5 +1,6 @@
-%% @copyright 2013-2014, Takeru Ohta <phjgt308@gmail.com>
+%% @copyright 2014, Takeru Ohta <phjgt308@gmail.com>
 %%
+%% @doc application module
 %% @private
 -module(local_app).
 

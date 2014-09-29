@@ -27,7 +27,7 @@ start_and_stop_name_server_test_() ->
      {"duplicated start",
       fun () ->
               ?assertEqual(ok, local:start_name_server(?NS)),
-              ?assertMatch({error, {already_started, _}}, local:start_name_server(?NS)),
+              ?assertMatch({error, already_present}, local:start_name_server(?NS)),
               ?assertEqual(ok, local:stop_name_server(?NS))
       end},
      {"delete not-started server",

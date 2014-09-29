@@ -1,6 +1,7 @@
 %% @copyright 2014, Takeru Ohta <phjgt308@gmail.com>
 %%
-%% TODO: doc
+%% @doc Local Name Server
+%% @private
 -module(local_name_server).
 
 -behaviour(gen_server).
@@ -9,10 +10,6 @@
 %% Exported API
 %%----------------------------------------------------------------------------------------------------------------------
 -export([start_link/1]).
-
-%%----------------------------------------------------------------------------------------------------------------------
-%% Application Internal API
-%%----------------------------------------------------------------------------------------------------------------------
 -export([register_name/3]).
 -export([unregister_name/2]).
 -export([whereis_name/2]).
@@ -34,25 +31,23 @@
 %%----------------------------------------------------------------------------------------------------------------------
 %% Exported Functions
 %%----------------------------------------------------------------------------------------------------------------------
+%% @doc Starts a new local name server process
 -spec start_link(local:name_server_name()) -> {ok, pid()} | {error, Reason} when
       Reason :: {already_started, pid()}.
 start_link(Name) ->
     gen_server:start_link({local, Name}, ?MODULE, [Name], []).
 
-%%----------------------------------------------------------------------------------------------------------------------
-%% Application Internal Functions
-%%----------------------------------------------------------------------------------------------------------------------
-%% @private
+%% @see local:register_name/2
 -spec register_name(local:name_server_name(), local:process_name(), pid()) -> yes | no.
 register_name(Server, Name, Pid) ->
     gen_server:call(Server, {register_name, {Name, Pid}}).
 
-%% @private
+%% @see local:unregister_name/2
 -spec unregister_name(local:name_server_name(), local:process_name()) -> ok.
 unregister_name(Server, Name) ->
     gen_server:call(Server, {unregister_name, Name}).
 
-%% @private
+%% @see local:whereis_name/2
 -spec whereis_name(local:name_server_name(), local:process_name()) -> pid() | undefined.
 whereis_name(Server, Name) ->
     try ets:lookup(Server, Name) of

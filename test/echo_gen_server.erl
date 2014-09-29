@@ -1,6 +1,6 @@
 %% @copyright 2014, Takeru Ohta <phjgt308@gmail.com>
 %%
-%% @doc TODO
+%% @doc Echo Server for Unit Test
 -module(echo_gen_server).
 
 %%----------------------------------------------------------------------------------------------------------------------
@@ -17,10 +17,12 @@
 %%----------------------------------------------------------------------------------------------------------------------
 %% Exported Functions
 %%----------------------------------------------------------------------------------------------------------------------
+%% @doc Starts echo server
 -spec start_link(term()) -> {ok, pid()} | {error, Reason::term()}.
 start_link(Name) ->
     gen_server:start_link(Name, ?MODULE, [], []).
 
+%% @doc Returns `{echo, Msg}'
 -spec call(term(), term()) -> {echo, term()}.
 call(Name, Msg) ->
     gen_server:call(Name, {call, Msg}).

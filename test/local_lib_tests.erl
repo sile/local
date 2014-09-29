@@ -9,7 +9,7 @@
 %%----------------------------------------------------------------------------------------------------------------------
 link_and_flush_test_() ->
     [
-     {"normal unlink",
+     {"unlink_and_flush: no flush",
       fun () ->
               Pid = spawn_link(timer, sleep, [infinity]),
               true = link(Pid),
@@ -17,7 +17,7 @@ link_and_flush_test_() ->
               exit(Pid, kill),
               ?assert(true)
       end},
-     {"flush unlink",
+     {"unlink_and_flush: flush EXIT message",
       fun () ->
               process_flag(trap_exit, true),
 
@@ -31,7 +31,7 @@ link_and_flush_test_() ->
               after 10 -> ?assert(true)
               end
       end},
-     {"flush unlink",
+     {"unlink: receive EXIT message",
       fun () ->
               process_flag(trap_exit, true),
 
