@@ -96,4 +96,4 @@ init([]) ->
 
 API
 ---
-See (EDoc Document)[doc/local.md]
+See [EDoc Document](doc/local.md)
