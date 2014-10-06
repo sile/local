@@ -195,6 +195,31 @@ gen_server_test_() ->
        end}
      ]}.
 
+which_processes_test_() ->
+    {foreach,
+     fun ()  -> ok = local:start_name_server(?NS) end,
+     fun (_) -> ok = local:stop_name_server(?NS) end,
+     [
+      {"get a list of registered process",
+       fun () ->
+               ?assertEqual([], local:which_processes(?NS)),
+
+               yes = local:register_name(?NAME(hoge), self()),
+               ?assertEqual([{hoge, self()}], local:which_processes(?NS)),
+
+               ok = local:unregister_name(?NAME(hoge)),
+               ?assertEqual([], local:which_processes(?NS))
+       end},
+      {"get a filtered list of registered process",
+       fun () ->
+               yes = local:register_name(?NAME(hoge), self()),
+
+               ?assertEqual([],               local:which_processes(?NS, fuga)),
+               ?assertEqual([{hoge, self()}], local:which_processes(?NS, hoge)),
+               ?assertEqual([{hoge, self()}], local:which_processes(?NS, '_'))
+       end}
+     ]}.
+
 %%----------------------------------------------------------------------------------------------------------------------
 %% Internal Functions
 %%----------------------------------------------------------------------------------------------------------------------

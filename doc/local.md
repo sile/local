@@ -42,6 +42,30 @@ name_server_name() = atom()
 
 
 
+### <a name="type-otp_name">otp_name()</a> ###
+
+
+
+<pre><code>
+otp_name() = {local, Name::atom()} | {global, Name::term()} | {via, module(), Name::term()}
+</code></pre>
+
+
+
+
+
+### <a name="type-otp_ref">otp_ref()</a> ###
+
+
+
+<pre><code>
+otp_ref() = (Name::atom()) | {Name::atom(), node()} | {global, Name::term()} | {via, module(), Name::term()} | pid()
+</code></pre>
+
+
+
+
+
 ### <a name="type-process_name">process_name()</a> ###
 
 
@@ -56,7 +80,7 @@ process_name() = term()
 ## Function Index ##
 
 
-<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#name_server_child_spec-1">name_server_child_spec/1</a></td><td>Equivalent to <a href="#name_server_child_spec-3"><tt>name_server_child_spec(Name, Name, 5000)</tt></a>.</td></tr><tr><td valign="top"><a href="#name_server_child_spec-3">name_server_child_spec/3</a></td><td>Returns the child spec for a local name server that is used in embedded mode.</td></tr><tr><td valign="top"><a href="#register_name-2">register_name/2</a></td><td>Locally assocates the name <code>Name</code> with a pid <code>Pid</code>.</td></tr><tr><td valign="top"><a href="#send-2">send/2</a></td><td>Sends the message <code>Msg</code> to the pid locally registered as <code>Name</code></td></tr><tr><td valign="top"><a href="#start_name_server-1">start_name_server/1</a></td><td>Starts a name server process.</td></tr><tr><td valign="top"><a href="#stop_name_server-1">stop_name_server/1</a></td><td>Stops the name server <code>ServerName</code></td></tr><tr><td valign="top"><a href="#unregister_name-1">unregister_name/1</a></td><td>Removes the locally registered name <code>Name</code></td></tr><tr><td valign="top"><a href="#whereis_name-1">whereis_name/1</a></td><td>Returns the pid with the locally registered name <code>Name</code></td></tr><tr><td valign="top"><a href="#which_name_servers-0">which_name_servers/0</a></td><td>Returns a list of running name server.</td></tr></table>
+<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#name_server_child_spec-1">name_server_child_spec/1</a></td><td>Equivalent to <a href="#name_server_child_spec-3"><tt>name_server_child_spec(Name, Name, 5000)</tt></a>.</td></tr><tr><td valign="top"><a href="#name_server_child_spec-3">name_server_child_spec/3</a></td><td>Returns the child spec for a local name server that is used in embedded mode.</td></tr><tr><td valign="top"><a href="#otp_name-1">otp_name/1</a></td><td>Returns OTP compatible name.</td></tr><tr><td valign="top"><a href="#register_name-2">register_name/2</a></td><td>Locally assocates the name <code>Name</code> with a pid <code>Pid</code>.</td></tr><tr><td valign="top"><a href="#send-2">send/2</a></td><td>Sends the message <code>Msg</code> to the pid locally registered as <code>Name</code></td></tr><tr><td valign="top"><a href="#start_name_server-1">start_name_server/1</a></td><td>Starts a name server process.</td></tr><tr><td valign="top"><a href="#stop_name_server-1">stop_name_server/1</a></td><td>Stops the name server <code>ServerName</code></td></tr><tr><td valign="top"><a href="#unregister_name-1">unregister_name/1</a></td><td>Removes the locally registered name <code>Name</code></td></tr><tr><td valign="top"><a href="#whereis_name-1">whereis_name/1</a></td><td>Returns the pid with the locally registered name <code>Name</code></td></tr><tr><td valign="top"><a href="#which_name_servers-0">which_name_servers/0</a></td><td>Returns a list of running name server.</td></tr><tr><td valign="top"><a href="#which_processes-1">which_processes/1</a></td><td>Returns a list of registered process.</td></tr><tr><td valign="top"><a href="#which_processes-2">which_processes/2</a></td><td>Returns a list of registered process that has a name which matches the pattern <code>Pattern</code></td></tr></table>
 
 
 <a name="functions"></a>
@@ -91,7 +115,20 @@ name_server_child_spec(ChildId, ServerName, Shutdown) -&gt; ChildSpec
 Returns the child spec for a local name server that is used in embedded mode.
 
 
-To embed a local name server in your application, you can add the child spec `ChildSpec` to your supervision tree.
+To embed a local name server in your application, you can simply add `ChildSpec` to your supervision tree.
+<a name="otp_name-1"></a>
+
+### otp_name/1 ###
+
+
+<pre><code>
+otp_name(Name::<a href="#type-name">name()</a>) -&gt; <a href="#type-otp_name">otp_name()</a>
+</code></pre>
+
+<br></br>
+
+
+Returns OTP compatible name
 <a name="register_name-2"></a>
 
 ### register_name/2 ###
@@ -220,3 +257,29 @@ which_name_servers() -&gt; [<a href="#type-name_server_name">name_server_name()<
 
 
 Returns a list of running name server
+<a name="which_processes-1"></a>
+
+### which_processes/1 ###
+
+
+<pre><code>
+which_processes(NameServer::<a href="#type-name_server_name">name_server_name()</a>) -&gt; [{<a href="#type-process_name">process_name()</a>, pid()}]
+</code></pre>
+
+<br></br>
+
+
+Returns a list of registered process
+<a name="which_processes-2"></a>
+
+### which_processes/2 ###
+
+
+<pre><code>
+which_processes(NameServer::<a href="#type-name_server_name">name_server_name()</a>, Pattern::<a href="ets.md#type-match_pattern">ets:match_pattern()</a>) -&gt; [{<a href="#type-process_name">process_name()</a>, pid()}]
+</code></pre>
+
+<br></br>
+
+
+Returns a list of registered process that has a name which matches the pattern `Pattern`

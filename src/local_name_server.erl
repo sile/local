@@ -13,6 +13,7 @@
 -export([register_name/3]).
 -export([unregister_name/2]).
 -export([whereis_name/2]).
+-export([which_processes/1, which_processes/2]).
 
 %%----------------------------------------------------------------------------------------------------------------------
 %% 'gen_server' Callback API
@@ -55,6 +56,24 @@ whereis_name(Server, Name) ->
         [{_, Pid}] -> Pid
     catch
         _:_ -> undefined
+    end.
+
+%% @see local:which_processes/1
+-spec which_processes(local:name_server_name()) -> [{local:process_name(), pid()}].
+which_processes(Server) ->
+    try
+        ets:tab2list(Server)
+    catch
+        _:_ -> []
+    end.
+
+%% @see local:which_processes/2
+-spec which_processes(local:name_server_name(), ets:match_pattern()) -> [{local:process_name(), pid()}].
+which_processes(Server, ProcNamePattern) ->
+    try
+        ets:match_object(Server, {ProcNamePattern, '_'})
+    catch
+        _:_ -> []
     end.
 
 %%----------------------------------------------------------------------------------------------------------------------

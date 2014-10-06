@@ -14,12 +14,17 @@
 -export([unregister_name/1]).
 -export([whereis_name/1]).
 -export([send/2]).
+-export([which_processes/1, which_processes/2]).
 
 -export([name_server_child_spec/1, name_server_child_spec/3]).
+
+-export([otp_name/1]).
 
 -export_type([name/0]).
 -export_type([name_server_name/0]).
 -export_type([process_name/0]).
+-export_type([otp_name/0]).
+-export_type([otp_ref/0]).
 
 %%----------------------------------------------------------------------------------------------------------------------
 %% Macros & Types
@@ -27,6 +32,16 @@
 -type name() :: {name_server_name(), process_name()}.
 -type name_server_name() :: atom().
 -type process_name() :: term().
+
+-type otp_name() :: {local, Name :: atom()}
+                  | {global, Name :: term()}
+                  | {via, module(), Name :: term()}.
+
+-type otp_ref() :: (Name :: atom())
+                 | {Name :: atom(), node()}
+                 | {global, Name :: term()}
+                 | {via, module(), Name :: term()}
+                 | pid().
 
 %%----------------------------------------------------------------------------------------------------------------------
 %% Exported Functions
@@ -97,6 +112,16 @@ send(Name, Msg) ->
         Pid       -> _ = Pid ! Msg, Pid
     end.
 
+%% @doc Returns a list of registered process
+-spec which_processes(name_server_name()) -> [{process_name(), pid()}].
+which_processes(NameServer) ->
+    local_name_server:which_processes(NameServer).
+
+%% @doc Returns a list of registered process that has a name which matches the pattern `Pattern'
+-spec which_processes(name_server_name(), ets:match_pattern()) -> [{process_name(), pid()}].
+which_processes(NameServer, ProcNamePattern) ->
+    local_name_server:which_processes(NameServer, ProcNamePattern).
+
 %% @equiv name_server_child_spec(Name, Name, 5000)
 -spec name_server_child_spec(name_server_name()) -> supervisor:child_spec().
 name_server_child_spec(Name) ->
@@ -114,3 +139,13 @@ name_server_child_spec(ChildId, ServerName, Shutdown) when is_atom(ServerName) -
     {ChildId, {local_name_server, start_link, [ServerName]}, permanent, Shutdown, worker, [local_name_server]};
 name_server_child_spec(ChildId, ServerName, Shutdown) ->
     error(badarg, [ChildId, ServerName, Shutdown]).
+
+%% @doc Returns OTP compatible name
+-spec otp_name(name()) -> otp_name().
+-ifdef('LOCAL_BEFORE_OTP17').
+otp_name(Name) ->
+    list_to_tuple([via, local, Name]).
+-else.
+otp_name(Name) ->
+    {via, local, Name}.
+-endif.
