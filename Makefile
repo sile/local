@@ -32,11 +32,12 @@ edoc:
 	@./rebar -r doc skip_deps=true
 
 start: compile
-	@erl -pz ebin apps/*/ebin deps/*/ebin -eval 'erlang:display({start_app, $(APP), application:ensure_all_started($(APP))}).'
+	@erl -pz ebin -eval 'erlang:display({start_app, $(APP), application:ensure_all_started($(APP))}).'
 
 .dialyzer.plt:
 	touch .dialyzer.plt
-	dialyzer --build_plt --plt .dialyzer.plt --apps erts kernel stdlib crypto compiler
+	dialyzer --build_plt --plt .dialyzer.plt --apps erts \
+	$(shell erl -noshell -pa ebin -eval '{ok, _} = application:ensure_all_started($(APP)), lists:foreach(fun erlang:display/1, [Name || {Name, _, _} <- application:which_applications(), Name =/= $(APP)]), halt().')
 
 dialyze: compile .dialyzer.plt
 	dialyzer --plt .dialyzer.plt -r ebin $(DIALYZER_OPTS)
