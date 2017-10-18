@@ -100,7 +100,3 @@ init([]) ->
     Child2 = local:name_server_child_spec(your_app_name_server_2),
     {ok, { {one_for_one, 5, 10}, [Child1, Child2]} }.
 ```
-
-API
----
-See [EDoc Document](doc/local.md)
