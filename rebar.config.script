@@ -1,8 +1,0 @@
-%% vim: set ft=erlang : -*- erlang -*-
-
-case erlang:system_info(version) < "6" of
-    false -> CONFIG;
-    true  ->
-        ErlOpts = proplists:get_value(erl_opts, CONFIG, []) ++ [{d, 'LOCAL_BEFORE_OTP17'}],
-        proplists:delete(erl_opts, CONFIG) ++ [{erl_opts, ErlOpts}]
-end.

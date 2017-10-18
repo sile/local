@@ -131,9 +131,9 @@ name_server_child_spec(Name) ->
 %%
 %% To embed a local name server in your application, you can simply add `ChildSpec' to your supervision tree.
 -spec name_server_child_spec(ChildId, ServerName, Shutdown) -> ChildSpec when
-      ChildId    :: supervisor:child_id(),
+      ChildId    :: term(),
       ServerName :: name_server_name(),
-      Shutdown   :: supervisor:shutdown(),
+      Shutdown   :: brutal_kill | timeout(),
       ChildSpec  :: supervisor:child_spec().
 name_server_child_spec(ChildId, ServerName, Shutdown) when is_atom(ServerName) ->
     {ChildId, {local_name_server, start_link, [ServerName]}, permanent, Shutdown, worker, [local_name_server]};
@@ -142,10 +142,5 @@ name_server_child_spec(ChildId, ServerName, Shutdown) ->
 
 %% @doc Returns OTP compatible name
 -spec otp_name(name()) -> otp_name().
--ifdef('LOCAL_BEFORE_OTP17').
-otp_name(Name) ->
-    list_to_tuple([via, local, Name]).
--else.
 otp_name(Name) ->
     {via, local, Name}.
--endif.
