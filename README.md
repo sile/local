@@ -1,12 +1,19 @@
 local
 =====
 
+[![hex.pm version](https://img.shields.io/hexpm/v/local.svg)](https://hex.pm/packages/local)
+[![Build Status](https://travis-ci.org/sile/local.svg?branch=master)](https://travis-ci.org/sile/local)
+[![Code Coverage](https://codecov.io/gh/sile/local/branch/master/graph/badge.svg)](https://codecov.io/gh/sile/local/branch/master)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 A Local Name Registration Facility.
 
 The library provides the following features:
 - Registration of locally scoped names
   - `gen_server` (and other OTP behaviours) can use the registration facility through `{via, local, local:name()}` formatted name
 - Can be embedded in another aplication
+
+[Documentation](https://hexdocs.pm/local/)
 
 QuickStart
 ----------
