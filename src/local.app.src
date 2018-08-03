@@ -1,15 +1,10 @@
-%% vim: set ft=erlang : -*- erlang -*-
-{application, local,
- [
-  {description, "A Local Name Registration Facility"},
-  {vsn, "0.2.0"},
-  {registered, [local_sup]},
-  {applications, [
-                  kernel,
-                  stdlib
-                 ]},
-  {mod, { local_app, []}},
-  {env, []},
-  {maintainers,["Takeru Ohta"]},
-  {licenses,["MIT"]},
-  {links,[{"GitHub","https://github.com/sile/local"}]}]}.
+{application,local,
+             [{description,"A Local Name Registration Facility"},
+              {vsn,"0.2.1"},
+              {registered,[local_sup]},
+              {applications,[kernel,stdlib]},
+              {mod,{local_app,[]}},
+              {env,[]},
+              {maintainers,["Takeru Ohta"]},
+              {licenses,["MIT"]},
+              {links,[{"GitHub","https://github.com/sile/local"}]}]}.
