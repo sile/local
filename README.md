@@ -19,7 +19,7 @@ QuickStart
 ----------
 ```bash
 # clone
-$ git clone git://github.com/sile/local.git
+$ git clone https://github.com/sile/local.git
 $ cd local
 
 # compile
